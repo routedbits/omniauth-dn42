@@ -49,3 +49,22 @@ end
 4) Use the example to verify
 
         ruby examples/sinatra.rb
+
+## Authentication Flow
+
+1) Request Phase (`request_phase`) [OmniAuth builtin]
+   * Renders ASN Prompt
+   * Sets Post to `method_path` (OmniAuth posts to `other_phase` method)
+
+2) Other Phase (OmniAuth builtin)
+   1) Method Phase
+      * Receives form post from `request_phase`
+      * Calls dn42regsrv for auth attributes of AS Maintaner object
+      * Renders select form
+
+   2) Challenge Phase
+      * Receives post from `method_phase`
+      * Renders challenge for user to sign
+   
+3) Callback Phase (OmniAuth builtin)
+   * Validates challenge from `challenge_phase`
