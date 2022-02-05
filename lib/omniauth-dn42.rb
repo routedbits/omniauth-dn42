@@ -21,7 +21,14 @@ module OmniAuth
 			option :dn42regsrv_url, 'https://explorer.burble.com/api/registry'
 
 			uid do
-				identity[options[:uid_field]]
+				@dn42[options[:uid_field]]
+			end
+
+			info do
+				{
+					asn: @dn42[:asn],
+					mnt: @dn42[:mnt]
+				}
 			end
 
 			def callback_phase
@@ -85,8 +92,13 @@ module OmniAuth
 						return false
 					end
 
-					# Return OmniAuth user information
-					return {asn: session[:omniauth_dn42_asn]}
+					# Set OmniAuth user information
+					@dn42 = {
+						asn: session[:omniauth_dn42_asn],
+						mnt: session[:omniauth_dn42_mnt]
+					}
+
+					return true
 				rescue GPGME::Error
 					log :error, "GPG error"
 					return false
@@ -109,20 +121,17 @@ module OmniAuth
 			def method_phase
 				asn = "AS" + request['asn'].gsub(/(AS)?(\d+)$/, '\2')
 
-				# make call to api for ASN maintainers
-				maintainers = _api_call("aut-num/#{asn}/mnt-by").values.first['mnt-by']
+				# make call to api for ASN maintainer
+				mnt = _api_call("aut-num/#{asn}/mnt-by").values.first['mnt-by'].first
 
 				# make call for maintainer auth keys
-				methods = {}
-
-				maintainers.each do |maintainer|
-					auth = _api_call("mntner/#{maintainer}/auth")
-					methods[maintainer] = auth.values.first['auth']
-				end
+				auth = _api_call("mntner/#{mnt}/auth")
+				methods = auth.values.first['auth']
 
 				# store verification materials in session
-				session[:omniauth_dn42_asn] = asn 							 # ASN
-				session[:omniauth_dn42_keys] = methods.values[0] # auth keys
+				session[:omniauth_dn42_asn]  = asn 		  # ASN
+				session[:omniauth_dn42_mnt]  = mnt      # mnt-by
+				session[:omniauth_dn42_keys] = methods  # auth keys
 
 				# respond with challenge form
 				_build_method_form.to_response
@@ -172,7 +181,7 @@ module OmniAuth
         session[:omniauth_dn42_keys].each do |key|
 					# check supported methods (right now only pgp)
 					if key =~ /^pgp-fingerprint/
-          	form.html "\n<option value='#{key}'>#{key.gsub(/^(.{25})?.*(.{15,}?)$/m,'\1...\2')}</option>"
+          	form.html "\n<option value='#{key}'>#{key.gsub(/^(.{25})?.*(.{8,}?)$/m,'\1...\2')}</option>"
 					end
         end
         form.html "\n</select>"
