@@ -141,9 +141,6 @@ module OmniAuth
 					if request.post?
 						log :debug, "POST other_phase (send to challenge_phase)"
 						challenge_phase
-					elsif request.get?
-						log :debug, "GET other_phase (redirect to step 1)"
-						redirect request_path # redirect back to step 1
 					else
 						call_app!
 					end
@@ -151,9 +148,6 @@ module OmniAuth
 					if request.post?
 						log :debug, "POST other_phase (send to method_phase)"
 						method_phase
-					elsif request.get?
-						log :debug, "GET other_phase (redirect to step 1)"
-						redirect request_path # redirect back to step 1
 					else
 						call_app!
 					end

@@ -3,10 +3,8 @@ $:.push File.dirname(__FILE__) + '/../lib'
 require 'omniauth-dn42'
 require 'sinatra'
 
-use Rack::Session::Cookie
-use OmniAuth::Strategies::Dn42
-
 set sessions: true
+use OmniAuth::Strategies::Dn42
 
 get '/' do
   <<~HTML
