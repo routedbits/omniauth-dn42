@@ -1,0 +1,38 @@
+PATH
+  remote: .
+  specs:
+    omniauth-dn42 (0.0.1)
+      faraday
+      gpgme
+      multi_json
+      omniauth (~> 2.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    faraday (2.2.0)
+      faraday-net_http (~> 2.0)
+      ruby2_keywords (>= 0.0.4)
+    faraday-net_http (2.0.1)
+    gpgme (2.0.20)
+      mini_portile2 (~> 2.3)
+    hashie (5.0.0)
+    mini_portile2 (2.7.1)
+    multi_json (1.15.0)
+    omniauth (2.0.4)
+      hashie (>= 3.4.6)
+      rack (>= 1.6.2, < 3)
+      rack-protection
+    rack (2.2.3)
+    rack-protection (2.1.0)
+      rack
+    ruby2_keywords (0.0.5)
+
+PLATFORMS
+  x86_64-linux
+
+DEPENDENCIES
+  omniauth-dn42!
+
+BUNDLED WITH
+   2.3.3
