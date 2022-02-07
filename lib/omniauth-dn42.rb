@@ -102,6 +102,16 @@ module OmniAuth
 				rescue GPGME::Error
 					log :error, "GPG error"
 					return false
+				ensure
+					# ensure all omniauth-dn42 session information is deleted
+					session.delete(:omniauth_dn42_asn)
+					session.delete(:omniauth_dn42_auth)
+					session.delete(:omniauth_dn42_keys)
+					session.delete(:omniauth_dn42_mnt)
+					session.delete(:omniauth_dn42_verify)
+
+					# delete imported public key from keyring
+					key.delete!
 				end
 			end
 
