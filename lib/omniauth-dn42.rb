@@ -111,7 +111,7 @@ module OmniAuth
 					session.delete(:omniauth_dn42_verify)
 
 					# delete imported public key from keyring
-					key.delete!
+					key.delete! unless key.nil?
 				end
 			end
 
