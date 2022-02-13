@@ -1,4 +1,6 @@
-$:.push File.dirname(__FILE__) + '/../lib'
+# frozen_string_literal: true
+
+$LOAD_PATH.push "#{File.dirname(__FILE__)}/../lib"
 
 require 'omniauth-dn42'
 require 'sinatra'
@@ -9,7 +11,7 @@ use OmniAuth::Strategies::Dn42
 get '/' do
   <<~HTML
     <form method='post' action='/auth/dn42'>
-      <input type="hidden" name="authenticity_token" value='#{request.env["rack.session"]["csrf"]}'>
+      <input type="hidden" name="authenticity_token" value='#{request.env['rack.session']['csrf']}'>
       <button type='submit'>Login with DN42</button>
     </form>
   HTML
